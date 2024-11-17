@@ -15,8 +15,8 @@
 ## Descrição
 
 <p align="center">
-<img src="https://pix4free.org/assets/library/2021-01-20/originals/game.jpg" alt="NOME DO JOGO" border="0">
- </p>
+<img src="imagens/Velocit.QR-logo.png">
+</p>
 
 
 <b>Velocit.QR</b> é uma solução inovadora que conecta fabricantes e oficinas, simplificando a gestão de garantias de autopeças.
