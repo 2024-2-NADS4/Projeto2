@@ -15,9 +15,8 @@
 ## Descrição
 
 <p align="center">
-<img src="imagens/Velocit.QR-logo.png">
+  <img src="imagens/Velocit.QR-logo.png" alt="Logo">
 </p>
-
 
 <b>Velocit.QR</b> é uma solução inovadora que conecta fabricantes e oficinas, simplificando a gestão de garantias de autopeças.
 <br><br>
