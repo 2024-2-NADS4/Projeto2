@@ -1,0 +1,26 @@
+{
+  "name": "nome-do-projeto",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
+    "@stitches/react": "^1.2.8",
+    "axios": "^1.7.7",
+    "next": "13.5.6",
+    "qrcode.react": "^4.1.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
