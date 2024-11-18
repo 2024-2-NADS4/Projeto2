@@ -77,6 +77,15 @@ npm install
 npm run dev
 ```
 
+### Backend (Local)
+
+Para o funcionamento local do backend, clone o projeto e navegue para a pasta backend:
+
+```sh
+git clone https://github.com/2024-2-NADS4/Projeto2.git
+cd src/backend
+```
+
 Para instalar as dependências você pode usar o comando pip no terminal. Siga estes passos:
 
 Certifique-se de estar no diretório onde o arquivo requirements.txt está localizado.
@@ -93,6 +102,8 @@ pandas>=1.5.0
 scikit-learn
 flask<3.0
 ```
+
+Após a instalação das dependências, inicio o servidor:
 
 ```sh
 python app.py
