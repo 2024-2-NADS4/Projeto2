@@ -77,7 +77,7 @@ Encontre o index.html na pasta executáveis e execute-o como uma página WEB (at
 
 ## 💻 Configuração para Desenvolvimento
 
-Para instalar várias dependências listadas em um arquivo requirements.txt, você pode usar o comando pip no terminal. Siga estes passos:
+Para instalar as dependências você pode usar o comando pip no terminal. Siga estes passos:
 
 Certifique-se de estar no diretório onde o arquivo requirements.txt está localizado.
 Execute o seguinte comando no terminal:
