@@ -101,7 +101,7 @@ scikit-learn
 flask<3.0
 ```
 
-Após a instalação das dependências, inicio o servidor:
+Após a instalação das dependências, inicie o servidor:
 
 ```sh
 python app.py
