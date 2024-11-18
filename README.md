@@ -59,7 +59,8 @@ Há também 3 pastas que seguem da seguinte forma:
 
 ## 💻 Configuração para Desenvolvimento
 
-** Link do projeto em produção: https://velocitqr.vercel.app/
+#### Link do projeto em produção: https://velocitqr.vercel.app/
+
 IMPORTANTE: A API está hospedada no CodeSandbox, que possui um limite de tempo de funcionamento para servidores não pagos. Portanto, pode ocorrer que o site não funcione corretamente ou fique temporariamente indisponível. Recomendamos que esteja ciente dessa limitação ao utilizar a aplicação.
 
 ### Frontend (Local)
