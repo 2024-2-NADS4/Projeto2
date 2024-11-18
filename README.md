@@ -77,20 +77,24 @@ Encontre o index.html na pasta executáveis e execute-o como uma página WEB (at
 
 ## 💻 Configuração para Desenvolvimento
 
-Descreva como instalar todas as dependências para desenvolvimento e como rodar um test-suite automatizado de algum tipo. Se necessário, faça isso para múltiplas plataformas.
+Para instalar várias dependências listadas em um arquivo requirements.txt, você pode usar o comando pip no terminal. Siga estes passos:
 
-Para abrir este projeto você necessita das seguintes ferramentas:
-
--<a href="https://godotengine.org/download">GODOT</a>
+Certifique-se de estar no diretório onde o arquivo requirements.txt está localizado.
+Execute o seguinte comando no terminal:
 
 ```sh
-make install
-npm test
-Coloque código do prompt de comnando se for necessário
+pip install -r requirements.txt
+```
+Isso instalará todas as bibliotecas especificadas no arquivo requirements.txt e as versões correspondentes, se especificadas.
+
+```sh
+numpy==1.23.5
+pandas>=1.5.0
+scikit-learn
+flask<3.0
 ```
 
 ## 📋 Licença/License
-
 
 ## 🎓 Referências
 
