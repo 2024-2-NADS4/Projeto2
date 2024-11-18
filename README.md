@@ -116,6 +116,10 @@ scikit-learn
 flask<3.0
 ```
 
+```sh
+python app.py
+```
+
 ## 📋 Licença/License
 
 ## 🎓 Referências
