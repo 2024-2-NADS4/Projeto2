@@ -86,6 +86,19 @@ Encontre o index.html na pasta executáveis e execute-o como uma página WEB (at
 
 ## 💻 Configuração para Desenvolvimento
 
+
+### Frontend (Local)
+
+```sh
+git clone https://github.com/2024-2-NADS4/Projeto2.git
+cd src/frontend
+```
+
+```sh
+npm install
+npm run dev
+```
+
 Para instalar as dependências você pode usar o comando pip no terminal. Siga estes passos:
 
 Certifique-se de estar no diretório onde o arquivo requirements.txt está localizado.
