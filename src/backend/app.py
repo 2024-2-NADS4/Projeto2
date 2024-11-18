@@ -5,7 +5,6 @@ import hashlib
 from ia import get_warranty_claims_ia, gerar_grafico_marcas, gerar_grafico_retornos_mensais, fitness_function, gerar_grafico_retornos_mensais_pecas, gerar_grafico_pecas, get_part_register_list_ia  # Importando as funções de ia.py
 from flask_cors import CORS
 
-# Inicialize o app Flask
 app = Flask(__name__)
 
 CORS(app)
@@ -13,63 +12,50 @@ CORS(app)
 
 def connect_db():
     db = sqlite3.connect('database.db')
-    # Permite que os resultados sejam acessados como dicionários
     db.row_factory = sqlite3.Row
     return db
 
 
 def get_part_register_part(partNumber):
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter informações da peça
     cursor.execute('SELECT 1 FROM carPart WHERE partNumber = ?', (partNumber,))
-    result = cursor.fetchone()  # Obtém a primeira linha do resultado
-
+    result = cursor.fetchone()
     db.close()
 
-    return result is not None  # Retorna True se a peça existe, False caso contrário
+    return result is not None
 
 
 def get_part_register_sale(partNumber):
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter informações da peça
     cursor.execute('SELECT 1 FROM carPart WHERE partNumber = ?', (partNumber,))
-    result = cursor.fetchone()  # Obtém a primeira linha do resultado
+    result = cursor.fetchone()
 
     db.close()
 
-    # Se o resultado for None, significa que a peça não existe, e deve gerar um erro
     if result is None:
-        return True  # A peça não existe
+        return True  
     else:
-        return False  # A peça já está registrada
+        return False  
 
 
 def get_warranty_claim_id(partNumber):
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter informações da peça
     cursor.execute(
         'SELECT 1 FROM warrantysClaims WHERE partNumber = ?', (partNumber,))
-    result = cursor.fetchone()  # Obtém a primeira linha do resultado
+    result = cursor.fetchone()
 
     db.close()
 
-    # Se o resultado for None, significa que a peça não existe, e deve gerar um erro
     if result is None:
-        return False  # A peça não existe
+        return False
     else:
-        return True  # A peça já está registrada
-
-# ============================================================================================
-
+        return True
 
 @app.route('/register_part', methods=['POST'])
 def register_part():
@@ -80,7 +66,6 @@ def register_part():
     lotNumber = data.get("lotNumber")
     urlQrcode = data.get("urlQrcode")
 
-    # Verificar se todos os campos necessários estão presentes
     required_fields = ['partModel', 'partBrand',
                        'partNumber', 'lotNumber', 'urlQrcode']
     for field in required_fields:
@@ -90,7 +75,6 @@ def register_part():
     if get_part_register_part(partNumber):
         return jsonify({"message": "A peça já está cadastrada"}), 400
 
-    # Insere os dados na tabela do banco de dados
     db = connect_db()
     cursor = db.cursor()
     cursor.execute('INSERT INTO carPart (partNumber, partModel, partBrand, lotNumber, urlQrcode) VALUES (?, ?, ?, ?, ?)',
@@ -99,9 +83,6 @@ def register_part():
     db.close()
 
     return jsonify({"message": "Cadastro realizado com sucesso"}), 200
-
-# Rota para cadastrar uma venda
-
 
 @app.route('/register_sale', methods=['POST'])
 def register_sale():
@@ -114,7 +95,6 @@ def register_sale():
     warrantyDeadline = data.get("warrantyDeadline")
     created_at = data.get("created_at")
 
-    # Verificar se todos os campos necessários estão presentes
     required_fields = ['name', 'taxNumber', 'email', 'phone',
                        'partNumber', 'warrantyDeadline', 'created_at']
     for field in required_fields:
@@ -127,7 +107,6 @@ def register_sale():
     if created_at > warrantyDeadline:
         return jsonify({"message": "A data de garantia deve ser maior que o dia atual"}), 400
 
-    # Insere os dados na tabela do banco de dados
     db = connect_db()
     cursor = db.cursor()
     cursor.execute(
@@ -144,9 +123,6 @@ def register_sale():
 
     return jsonify({"message": "Venda cadastrada com sucesso"}), 200
 
-# Rota para verificar se o cliente existe e solicitar a garantia
-
-
 @app.route('/warranty_claim', methods=['POST'])
 def warranty_claim():
     data = request.json
@@ -156,7 +132,6 @@ def warranty_claim():
     phone = data.get("phone")
     partNumber = data.get("partNumber")
 
-    # Verificar se todos os campos necessários estão presentes
     required_fields = ['name', 'taxNumber', 'email', 'phone', 'partNumber']
     missing_fields = [field for field in required_fields if field not in data]
     if missing_fields:
@@ -165,7 +140,6 @@ def warranty_claim():
     if get_warranty_claim_id(partNumber):
         return jsonify({"message": "Já foi solicitada a garantia para peça"}), 400
 
-    # Conectar ao banco e realizar a consulta
     db = connect_db()
     cursor = db.cursor()
 
@@ -181,7 +155,6 @@ def warranty_claim():
         result = cursor.fetchone()
 
         if result:
-            # Mapeia os resultados retornados pelo banco de dados para um dicionário
             response = {
                 "partModel": result[0],
                 "partBrand": result[1],
@@ -194,19 +167,16 @@ def warranty_claim():
                 "warrantyDeadline": result[8]
             }
 
-            # Verificar se os dados batem
             if (response['name'] != name or response['taxNumber'] != taxNumber or
                     response['email'] != email or response['phone'] != phone):
                 return jsonify({"message": "Os dados não batem com a venda da peça"}), 404
 
-            # Verificar validade da garantia
             from datetime import datetime
             warranty_deadline = datetime.strptime(
                 response['warrantyDeadline'], "%Y-%m-%d %H:%M:%S")
             if datetime.now() > warranty_deadline:
                 return jsonify({"message": "A garantia expirou"}), 400
 
-        # Inserir solicitação de garantia
         cursor.execute(
             'INSERT INTO warrantysClaims (partNumber) VALUES (?)', (partNumber,))
         db.commit()
@@ -264,19 +234,15 @@ def login_register():
 @app.route('/carpart-info/<partNumber>', methods=['GET'])
 def get_part(partNumber):
 
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter informações da peça
     cursor.execute(
         'SELECT partModel, partBrand, partNumber, lotNumber, urlQrcode FROM carPart WHERE partNumber = ?', (partNumber,))
-    result = cursor.fetchone()  # Obtém a primeira linha do resultado
-
+    result = cursor.fetchone()
     db.close()
 
     if result:
-        # Mapeia os resultados retornados pelo banco de dados para um dicionário
         response = {
             "partModel": result[0],
             "partBrand": result[1],
@@ -286,26 +252,22 @@ def get_part(partNumber):
         }
         return jsonify(response), 200
     else:
-        # Caso nenhum registro seja encontrado
         return jsonify({"message": "Peça não encontrada"}), 404
 
 
 @app.route('/part_register_list', methods=['GET'])
 def get_part_register_list():
 
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter todas as peças
     cursor.execute(
         'SELECT partModel, partBrand, partNumber, lotNumber, urlQrcode FROM carPart')
-    results = cursor.fetchall()  # Obtém todos os registros
+    results = cursor.fetchall()
 
     db.close()
 
     if results:
-        # Mapeia os resultados para uma lista de dicionários
         response = [
             {
                 "partModel": row[0],
@@ -318,14 +280,12 @@ def get_part_register_list():
         ]
         return jsonify(response), 200
     else:
-        # Caso nenhum registro seja encontrado
         return jsonify({"message": "Nenhuma peça encontrada"}), 404
 
 
 @app.route('/warranty_claims', methods=['GET'])
 def get_warranty_claims():
 
-    # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
@@ -348,14 +308,12 @@ def get_warranty_claims():
     INNER JOIN 
         registerSale rs ON wc.partNumber = rs.partNumber;
     """
-    # Executa a consulta para obter todas as peças
     cursor.execute(query)
-    results = cursor.fetchall()  # Obtém todos os registros
+    results = cursor.fetchall()
 
     db.close()
 
     if results:
-        # Mapeia os resultados para uma lista de dicionários
         response = [
             {
                 "id": row[0],
@@ -373,18 +331,15 @@ def get_warranty_claims():
         ]
         return jsonify(response), 200
     else:
-        # Caso nenhum registro seja encontrado
         return jsonify({"message": "Nenhuma peça encontrada"}), 404
 
 
 @app.route('/warranty_claim/<warranty_claim>', methods=['GET'])
 def get_warranty_claim(warranty_claim):
 
- # Conecta ao banco de dados
     db = connect_db()
     cursor = db.cursor()
 
-    # Executa a consulta para obter informações da peça
     cursor.execute('''
     SELECT P.partModel, P.partBrand, P.partNumber, P.lotNumber,
     S.name, S.taxNumber, S.email, S.phone, S.warrantyDeadline
@@ -392,12 +347,11 @@ def get_warranty_claim(warranty_claim):
     INNER JOIN registerSale AS S ON P.partNumber = S.partNumber
     WHERE P.partNumber = ?
     ''', (warranty_claim,))
-    result = cursor.fetchone()  # Obtém a primeira linha do resultado
+    result = cursor.fetchone()
 
     db.close()
 
     if result:
-        # Mapeia os resultados retornados pelo banco de dados para um dicionário
         response = {
             "partModel": result[0],
             "partBrand": result[1],
@@ -411,21 +365,18 @@ def get_warranty_claim(warranty_claim):
         }
         return jsonify(response), 200
     else:
-        # Caso nenhum registro seja encontrado
         return jsonify({"message": "Garantia não encontrada"}), 404
 
 
 @app.route('/dados', methods=['GET'])
 def dados():
     try:
-        # Obtém as reclamações de garantia
         warranty_claims = get_warranty_claims_ia()
         part_register_list = get_part_register_list_ia()
 
         if not warranty_claims:
             return jsonify({"message": "Nenhuma reclamação de garantia encontrada"}), 404
 
-        # Gerar gráficos
         grafico_marcas_base64 = gerar_grafico_marcas(warranty_claims)
         grafico_mensal_marcas_base64 = gerar_grafico_retornos_mensais(
             warranty_claims)
@@ -433,11 +384,9 @@ def dados():
         grafico_mensal_pecas_base64 = gerar_grafico_retornos_mensais_pecas(
             part_register_list)
 
-        # Executa a função fitness e gera o relatório
         fitness_score, relatorio = fitness_function(
             objetivo_retorno_min=50, objetivo_retorno_max=80)
 
-        # Retorna os dados em formato JSON
         return jsonify({
             'grafico_marcas_base64': grafico_marcas_base64,
             'grafico_mensal_marcas_base64': grafico_mensal_marcas_base64,
@@ -450,7 +399,5 @@ def dados():
     except Exception as e:
         return jsonify({"message": f"Ocorreu um erro: {str(e)}"}), 500
 
-
-# Execute o app
 if __name__ == '__main__':
     app.run(debug=True)
