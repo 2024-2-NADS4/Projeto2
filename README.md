@@ -28,9 +28,16 @@ Por meio de QR codes, fabricantes cadastram informações detalhadas das peças,
 -Raiz<br>
 |<br>
 |-->documentos<br>
-  &emsp;|-->antigos<br>
-  &emsp;|Documentação.docx<br>
+  &emsp;|-->Cibersegurança<br>
+  &emsp;|Criptografia_md5.pdf<br>
+  &emsp;|-->Gestão_de_Projetos_de_Software<br>
+  &emsp;|PlanodeProjeto_VelocitQR.xlsx<br>
+  &emsp;|ProjectCharter_VelocitQR.pdf<br>
+  &emsp;|-->Inteligência_Artificial<br>
+  &emsp;|autopecas_motor_planilha.xlsx<br>
+  &emsp;|AlgoritmoDeOtimizacao.ipynb<br>
 |-->imagens<br>
+  &emsp;|VelocitQR-logo.png<br>
 |-->src<br>
   &emsp;|-->Backend<br>
   &emsp;|-->Frontend<br>
